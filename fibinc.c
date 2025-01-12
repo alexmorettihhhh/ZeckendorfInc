@@ -6,8 +6,7 @@
 
 void normalize(char *fib)
 {
-    int len = strlen(fib);
-    for (int i = len - 1; i >= 2; i--)
+    for (int i = strlen(fib) - 1; i >= 2; i--)
     {
         if (fib[i] == '1' && fib[i - 1] == '1' && fib[i - 2] == '0')
         {
@@ -33,11 +32,24 @@ void increment(char *fib)
     }
     else
     {
-        strcat(fib, "0");
-        fib[len] = '1';
+        fib[len] = '0';
+        fib[len + 1] = '\0';
+        fib[len - 1] = '1';
     }
 
     normalize(fib);
+}
+
+int validate_input(const char *fib)
+{
+    for (int i = 0; fib[i] != '\0'; i++)
+    {
+        if (fib[i] != '0' && fib[i] != '1')
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 int main(int argc, char *argv[])
@@ -51,13 +63,10 @@ int main(int argc, char *argv[])
     char fib[MAX_LEN];
     snprintf(fib, sizeof(fib), "%s", argv[1]);
 
-    for (int i = 0; fib[i] != '\0'; i++)
+    if (!validate_input(fib))
     {
-        if (fib[i] != '0' && fib[i] != '1')
-        {
-            fprintf(stderr, "Error: Input must be a binary number in Fibonacci representation.\n");
-            return 1;
-        }
+        fprintf(stderr, "Error: Input must be a binary number in Fibonacci representation.\n");
+        return 1;
     }
 
     increment(fib);
@@ -65,3 +74,4 @@ int main(int argc, char *argv[])
     printf("%s\n", fib);
     return 0;
 }
+
